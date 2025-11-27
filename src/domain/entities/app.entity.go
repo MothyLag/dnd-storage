@@ -7,6 +7,7 @@ type AppClient struct{
 	AppName string `bson:"appName" json:"app_name"`
 	Apikey string `bson:"apiKey" json:"api_key"`
 	AppSecret string `bson:"appSecret" json:"app_secret"`
+	Rol string `bson:"rol" json:"rol"`
 }
 
 func (app *AppClient) IsValid() bool{
