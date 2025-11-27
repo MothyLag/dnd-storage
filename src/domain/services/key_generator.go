@@ -10,11 +10,11 @@ func GenerateKeyPair()(string,string,error){
 	secretBytes := make([]byte,32)
 
 	if _,err := rand.Read(keyBytes); err != nil{
-		return "","",nil
+		return "","",err
 	}
 
 	if _,err := rand.Read(secretBytes); err != nil{
-		return "","",nil
+		return "","",err
 	}
 
 	apikey := hex.EncodeToString(keyBytes)
