@@ -8,14 +8,18 @@ import (
 
 type CreateUser struct{
 	repo ports.UserRepository
+	service ports.UserService
 }
 
-func NewCreateUser(repo ports.UserRepository) *CreateUser{
-	return &CreateUser{repo: repo}	
+func NewCreateUser(repo ports.UserRepository,service ports.UserService) *CreateUser{
+	return &CreateUser{
+		repo: repo,
+		service: service,
+	}	
 }
 
 func (c *CreateUser) ExecuteCreateUser(u entities.User) error{
-	if err := services.ValidateUser(u); err != nil{
+	if err := c.service.ValidateUser(u); err != nil{
 		return err
 	}
 	hashed,err := services.HashPassword(u.Password)

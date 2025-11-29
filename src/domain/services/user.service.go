@@ -5,7 +5,13 @@ import (
 	"errors"
 )
 
-func ValidateUser(u entities.User) error {
+type UserService struct{}
+
+func NewUserService() *UserService{
+	return &UserService{}
+}
+
+func (s *UserService)ValidateUser(u entities.User) error {
 	if !u.IsValid() {
 		return errors.New("Invalid User: review information and try again")
 	}

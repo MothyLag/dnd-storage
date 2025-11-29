@@ -7,7 +7,13 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func GenerateKeyPair()(string,string,error){
+type KeyService struct{}
+
+func NewKeyService() *KeyService{
+	return &KeyService{}
+}
+
+func (s *KeyService)GenerateKeyPair()(string,string,error){
 	keyBytes := make([]byte,16)
 	secretBytes := make([]byte,32)
 
@@ -25,7 +31,7 @@ func GenerateKeyPair()(string,string,error){
 	return apikey,apiSecret,nil
 }
 
-func ValidateKeyPair(apiSecretRequest,apiSecretStored string) bool{
+func (s *KeyService)ValidateKeyPair(apiSecretRequest,apiSecretStored string) bool{
 	err := bcrypt.CompareHashAndPassword([]byte(apiSecretStored),[]byte(apiSecretRequest))	
 	return err == nil
 }

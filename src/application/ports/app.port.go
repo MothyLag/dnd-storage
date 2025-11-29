@@ -9,5 +9,5 @@ type AppRepository interface{
 }
 
 type AppServices interface{
-	ValidateKeyPair(apiSecretRequest,apiSecretStored string) bool
+	ValidateApp(app entities.AppClient) error
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"dnd-storage/src/application/usecases"
 	"dnd-storage/src/controllers"
+	"dnd-storage/src/domain/services"
 	"dnd-storage/src/infrastructure/repository"
 	"fmt"
 	"log"
@@ -49,10 +50,14 @@ func main(){
 	db := client.Database(mongoDBName)
 	userRepo := repository.NewUserMongoRepository(db)
 	appRepo := repository.NewAppMongoRepository(db)
+	//services
+	userService := services.NewUserService()
+	appService := services.NewAppService()
+	keyService := services.NewKeyService()
 	//usecases
-	createUser := usecases.NewCreateUser(userRepo)
-	createApp := usecases.NewCreateApp(appRepo)
-	updateApp := usecases.NewUpdateApp(appRepo)
+	createUser := usecases.NewCreateUser(userRepo,userService)
+	createApp := usecases.NewCreateApp(appRepo,appService,keyService)
+	updateApp := usecases.NewUpdateApp(appRepo,appService)
 	//controllers
 	userController := controllers.NewUserController(createUser)
 	appController := controllers.NewAppController(createApp,updateApp)
@@ -62,7 +67,7 @@ func main(){
 	userGroup.POST("/",userController.CreateUserHandler)
 	//apps
 	appsGroup := r.Group("app")
-	appsGroup.Use(controllers.AuthMiddleware(appRepo,[]string{"system"}))
+	appsGroup.Use(controllers.AuthMiddleware(appRepo,keyService,[]string{"system"}))
 	appsGroup.POST("/",appController.CreateAppHandler)
 	appsGroup.PUT("/:id",appController.UpdateAppHandler)
 

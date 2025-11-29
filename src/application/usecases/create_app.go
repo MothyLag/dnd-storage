@@ -8,17 +8,23 @@ import (
 
 type CreateApp struct{
 	repo ports.AppRepository
+	appService ports.AppServices
+	keyService ports.KeyService
 }		
 
-func NewCreateApp(repo ports.AppRepository) *CreateApp{
-	return &CreateApp{repo: repo}
+func NewCreateApp(repo ports.AppRepository,appService ports.AppServices,keyService ports.KeyService) *CreateApp{
+	return &CreateApp{
+		repo: repo,
+		appService: appService,
+		keyService: keyService,
+	}
 }
 
 func (c *CreateApp) Execute(app entities.AppClient) (string,string,error){
-	if err := services.ValidateApp(app); err != nil{
+	if err := c.appService.ValidateApp(app); err != nil{
 		return "","",err	
 	}
-	apiKey,apiSecret,err := services.GenerateKeyPair()
+	apiKey,apiSecret,err := c.keyService.GenerateKeyPair()
 	hashed,err := services.HashPassword(apiSecret)
 	if err != nil {
 		return "","",err

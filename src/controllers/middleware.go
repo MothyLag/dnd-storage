@@ -2,14 +2,13 @@ package controllers
 
 import (
 	"dnd-storage/src/application/ports"
-	"dnd-storage/src/domain/services"
 	"net/http"
 	"slices"
 
 	"github.com/gin-gonic/gin"
 )
 
-func AuthMiddleware(appRepo ports.AppRepository,allowedRoles []string) gin.HandlerFunc{
+func AuthMiddleware(appRepo ports.AppRepository,keyService ports.KeyService,allowedRoles []string) gin.HandlerFunc{
 	return func(c *gin.Context){
 		apiKey := c.GetHeader("API-KEY")
 		apiSecret := c.GetHeader("API-SECRET")
@@ -26,7 +25,7 @@ func AuthMiddleware(appRepo ports.AppRepository,allowedRoles []string) gin.Handl
 			c.Abort()
 			return
 		}
-		if services.ValidateKeyPair(apiSecret,appClient.AppSecret){
+		if keyService.ValidateKeyPair(apiSecret,appClient.AppSecret){
 			c.JSON(http.StatusUnauthorized,gin.H{"error":"Invalid key pairs"})
 			c.Abort()
 			return

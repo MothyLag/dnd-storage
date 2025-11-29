@@ -27,7 +27,7 @@ func NewAppMongoRepository(db *mongo.Database) *AppMongoRepository{
 }
 
 func (repo *AppMongoRepository)Save(app entities.AppClient) error{
-	doc,err := toDocument(app)
+	doc,err := appToDocument(app)
 	if err != nil{
 		return fmt.Errorf("Error Creating document: %s",err.Error())
 	}
@@ -45,7 +45,7 @@ func (repo *AppMongoRepository)FindAppByApiKey(apiKey string) (entities.AppClien
 		}
 		return entities.AppClient{},fmt.Errorf("Error Decoding Api Key: %s",err.Error())
 	}
-	return toDomain(app),nil
+	return appToDomain(app),nil
 }
 
 func (repo *AppMongoRepository) Update(app entities.AppClient,id string) error{
@@ -54,7 +54,7 @@ func (repo *AppMongoRepository) Update(app entities.AppClient,id string) error{
 	if err != nil{
 		return fmt.Errorf("invalid id: %w",err)
 	}
-	doc,err := toDocument(app)
+	doc,err := appToDocument(app)
 	if err != nil{
 		return fmt.Errorf("Error Updating App:%s",err.Error())
 	}
@@ -80,7 +80,7 @@ func (repo *AppMongoRepository) Update(app entities.AppClient,id string) error{
 	return nil
 } 
 
-func toDomain(doc AppClientDocument) entities.AppClient{
+func appToDomain(doc AppClientDocument) entities.AppClient{
 	return entities.AppClient{
 		ID: doc.ID.Hex(),
 		Apikey: doc.Apikey,
@@ -89,7 +89,7 @@ func toDomain(doc AppClientDocument) entities.AppClient{
 	}
 }
 
-func toDocument(app entities.AppClient)(AppClientDocument,error){
+func appToDocument(app entities.AppClient)(AppClientDocument,error){
 	var oid primitive.ObjectID
 	var err error
 

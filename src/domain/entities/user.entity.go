@@ -2,14 +2,13 @@ package entities
 
 import (
 	"regexp"
-
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type User struct {
-	ID primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
-	UserName string `bson:"userName" json:"user_name"`
-	Password string `bson:"password" json:"-"`
+	ID string `json:"-"`
+	UserName string `json:"user_name,omitempty"`
+	Password string `json:"password,omitempty"`
+	Role string `json:"role,omitempty"`
 }
 
 func (u *User) IsValid() bool{
