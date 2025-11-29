@@ -11,12 +11,24 @@ type User struct {
 	Role string `json:"role,omitempty"`
 }
 
+type LoginUser struct{
+	UserName string `json:"user_name"`
+	Password string `json:"password"`
+}
+
 func (u *User) IsValid() bool{
 	return u.UserName != "" && len(u.UserName) > 5 && IsValidPassword(u.Password)
 }
 
+func (lu *LoginUser) IsValidAttempt() bool{
+	return lu.UserName != "" && lu.Password != ""
+}
+
 func IsValidPassword(pwd string) bool{
 	if(pwd == "" || len(pwd) < 6 || len(pwd) > 15 ){ return false}
-	re := regexp.MustCompile(`^(?!.*123456)(?=.*[A-Z])(?=.*\d).+$`)
-	return re.MatchString(pwd)
+	hasUpper := regexp.MustCompile(`[A-Z]`).MatchString(pwd)
+    hasDigit := regexp.MustCompile(`\d`).MatchString(pwd)
+    noSequence := !regexp.MustCompile(`123456`).MatchString(pwd)
+
+	return hasUpper && hasDigit && noSequence
 }

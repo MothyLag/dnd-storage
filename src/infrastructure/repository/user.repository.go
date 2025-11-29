@@ -3,8 +3,10 @@ package repository
 import (
 	"context"
 	"dnd-storage/src/domain/entities"
+	"errors"
 	"fmt"
 
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -30,6 +32,19 @@ func (r *UserMongoRepository) Save(u entities.User) error{
 	}
 	_,err = r.collection.InsertOne(context.Background(), newDoc)
 	return err
+}
+
+func (r *UserMongoRepository) GetUserByUserName(userName string) (entities.User,error){
+	var user UserDocument
+	response := r.collection.FindOne(context.Background(),bson.M{"userName":userName})
+	if err := response.Decode(&user); err != nil{
+		if errors.Is(err,mongo.ErrNoDocuments){
+			return entities.User{},fmt.Errorf("Invalid Credentials")
+		}
+		//TODO: Change this errors to logs
+		return entities.User{},fmt.Errorf("Error Trying to decode User:%s",err.Error())
+	}
+	return userToDomain(user),nil
 }
 
 func usertoDocument(user entities.User) (UserDocument,error){

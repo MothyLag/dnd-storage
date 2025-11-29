@@ -17,3 +17,10 @@ func (s *UserService)ValidateUser(u entities.User) error {
 	}
 	return nil
 }
+
+func (s *UserService)ValidateLoginAttempt(lu entities.LoginUser) error {
+	if !lu.IsValidAttempt(){
+		return errors.New("Invalid Attempt please fill all the fields")
+	}
+	return nil
+}
