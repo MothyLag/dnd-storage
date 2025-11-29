@@ -10,10 +10,14 @@ import (
 
 type AppController struct{
 	CreateApp *usecases.CreateApp
+	UpdateApp *usecases.UpdateApp
 }
 
-func NewAppController(CreateApp *usecases.CreateApp) *AppController{
-	return &AppController{CreateApp: CreateApp}
+func NewAppController(CreateApp *usecases.CreateApp,UpdateApp *usecases.UpdateApp) *AppController{
+	return &AppController{
+		CreateApp: CreateApp,
+		UpdateApp: UpdateApp,
+	}
 }
 
 func (ac *AppController) CreateAppHandler(c *gin.Context){
@@ -32,5 +36,21 @@ func (ac *AppController) CreateAppHandler(c *gin.Context){
 		"api_name":input.AppName,
 		"api_key":apiKey,
 		"api_secret":apiSecret,
+	})
+}
+
+func (ac *AppController) UpdateAppHandler(c *gin.Context){
+	var input entities.AppClient
+	id := c.Param("id")
+	if err := c.ShouldBindJSON(&input); err != nil{
+		c.JSON(http.StatusBadRequest,gin.H{"error":"Invalid Json:"+err.Error()})
+		return
+	}
+	if err := ac.UpdateApp.Execute(input,id); err !=nil{
+		c.JSON(http.StatusConflict,gin.H{"error":"Internal Error"+err.Error()})
+		return
+	}
+	c.JSON(http.StatusAccepted,gin.H{
+		"message":"App Successfully Updated",
 	})
 }

@@ -3,6 +3,8 @@ package services
 import (
 	"crypto/rand"
 	"encoding/hex"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 func GenerateKeyPair()(string,string,error){
@@ -21,4 +23,9 @@ func GenerateKeyPair()(string,string,error){
 	apiSecret := hex.EncodeToString(secretBytes)
 
 	return apikey,apiSecret,nil
+}
+
+func ValidateKeyPair(apiSecretRequest,apiSecretStored string) bool{
+	err := bcrypt.CompareHashAndPassword([]byte(apiSecretStored),[]byte(apiSecretRequest))	
+	return err == nil
 }

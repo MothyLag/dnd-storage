@@ -45,23 +45,26 @@ func main(){
 		log.Fatal(err)
 	}
 	defer client.Disconnect(ctx)
-
+	//repos
 	db := client.Database(mongoDBName)
 	userRepo := repository.NewUserMongoRepository(db)
 	appRepo := repository.NewAppMongoRepository(db)
-
+	//usecases
 	createUser := usecases.NewCreateUser(userRepo)
 	createApp := usecases.NewCreateApp(appRepo)
-
+	updateApp := usecases.NewUpdateApp(appRepo)
+	//controllers
 	userController := controllers.NewUserController(createUser)
-	appController := controllers.NewAppController(createApp)
+	appController := controllers.NewAppController(createApp,updateApp)
 	r := gin.Default()
 	//users
 	userGroup := r.Group("user")
 	userGroup.POST("/",userController.CreateUserHandler)
 	//apps
 	appsGroup := r.Group("app")
+	appsGroup.Use(controllers.AuthMiddleware(appRepo,[]string{"system"}))
 	appsGroup.POST("/",appController.CreateAppHandler)
+	appsGroup.PUT("/:id",appController.UpdateAppHandler)
 
 	log.Println("Server running at http://localhost:",port)
 	if err := r.Run(":"+port); err != nil{

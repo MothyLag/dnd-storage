@@ -1,13 +1,11 @@
 package entities
 
-import "go.mongodb.org/mongo-driver/bson/primitive"
-
 type AppClient struct{
-	ID primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
-	AppName string `bson:"appName" json:"app_name"`
-	Apikey string `bson:"apiKey" json:"api_key"`
-	AppSecret string `bson:"appSecret" json:"app_secret"`
-	Rol string `bson:"rol" json:"rol"`
+	ID string `json:"id,omitempty"`
+	AppName string `json:"app_name"`
+	Apikey string `json:"api_key"`
+	AppSecret string `json:"app_secret"`
+	Rol string `json:"rol"`
 }
 
 func (app *AppClient) IsValid() bool{
