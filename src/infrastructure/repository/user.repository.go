@@ -62,6 +62,7 @@ func usertoDocument(user entities.User) (UserDocument,error){
 		ID: oid,
 		UserName: user.UserName,
 		Password: user.Password,
+		Role: user.Role,
 	},nil
 }
 
@@ -70,5 +71,6 @@ func userToDomain(doc UserDocument) entities.User{
 		ID: doc.ID.Hex(),
 		UserName: doc.UserName,
 		Password: doc.Password,
+		Role: doc.Role,
 	}
 }

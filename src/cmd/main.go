@@ -6,6 +6,7 @@ import (
 	"dnd-storage/src/controllers"
 	"dnd-storage/src/domain/services"
 	"dnd-storage/src/infrastructure/repository"
+	repoChar"dnd-storage/src/infrastructure/repository/character"
 	"fmt"
 	"log"
 	"os"
@@ -51,20 +52,25 @@ func main(){
 	db := client.Database(mongoDBName)
 	userRepo := repository.NewUserMongoRepository(db)
 	appRepo := repository.NewAppMongoRepository(db)
+	characterRepo := repoChar.NewCharacterMongoRepository(db)
 	//services
 	userService := services.NewUserService()
 	appService := services.NewAppService()
 	keyService := services.NewKeyService()
 	jwtService := services.NewJWTService()
+	characterService := services.NewCharacterService()
 	//usecases
 	createUser := usecases.NewCreateUser(userRepo,userService)
 	loginUser := usecases.NewLoginUser(jwtSecret,userRepo,userService,keyService,jwtService)
 	createApp := usecases.NewCreateApp(appRepo,appService,keyService)
 	updateApp := usecases.NewUpdateApp(appRepo,appService)
-
+	createChar := usecases.NewCharacterUseCase(characterRepo,characterService)
+	lookCharByUser := usecases.NewLookCharacterByUser(characterRepo)
+	lookChar := usecases.NewLookCharacter(characterRepo)
 	//controllers
 	userController := controllers.NewUserController(createUser,loginUser)
 	appController := controllers.NewAppController(createApp,updateApp)
+	characterController := controllers.NewCharacterController(createChar,lookCharByUser,lookChar)
 	r := gin.Default()
 	//users
 	userGroup := r.Group("user")
@@ -76,7 +82,13 @@ func main(){
 	appsGroup.Use(controllers.AuthMiddleware(appRepo,keyService,[]string{"system"}))
 	appsGroup.POST("/",appController.CreateAppHandler)
 	appsGroup.PUT("/:id",appController.UpdateAppHandler)
-
+	//characters
+	charGroup := r.Group("character")
+	charGroup.Use(controllers.AuthMiddleware(appRepo,keyService,[]string{"system","admin"}),
+		controllers.JwtAuthMiddleware(jwtService,jwtSecret,[]string{"admin","dm","player"}))
+	charGroup.POST("/",characterController.PostCharacter)
+	charGroup.GET("/",characterController.GetCharactersByUserId)
+	charGroup.GET("/:id",characterController.GetCharacterById)
 	log.Println("Server running at http://localhost:",port)
 	if err := r.Run(":"+port); err != nil{
 		log.Fatal(err)

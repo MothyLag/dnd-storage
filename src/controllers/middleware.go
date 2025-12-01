@@ -53,11 +53,12 @@ func JwtAuthMiddleware(jwtService *services.JWTService,jwtSecret string,allowedR
 			c.Abort()
 			return
 		}
-		tokenStr = strings.TrimPrefix(tokenStr,"Bearer ")
+		tokenStr = strings.TrimSpace(strings.TrimPrefix(tokenStr,"Bearer"))
 
 		claims,err := jwtService.ValidateToken(tokenStr,jwtSecret)
+
 		if err != nil{
-			c.JSON(http.StatusUnauthorized,gin.H{"error":"Invalid Token"})
+			c.JSON(http.StatusUnauthorized,gin.H{"error":"Invalid Token: "+tokenStr})
 			c.Abort()
 			return
 		}
