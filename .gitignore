@@ -1,0 +1,4 @@
+# National Secrets
+.env
+dnd-api.env
+dnd-db.env

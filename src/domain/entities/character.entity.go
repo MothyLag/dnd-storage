@@ -5,7 +5,7 @@ type Character struct{
 	ID string `json:"id,omitempty"`
 	Name string `json:"name,omitempty"`
 	Level int `json:"level,omitempty"`
-	CodeName string `json:"code_name,omitempty"`
+	CodeName string `json:"codeName,omitempty"`
 	Class string `json:"class,omitempty"`
 	Race string `json:"race,omitempty"`
 	Background string `json:"background,omitempty"`
@@ -14,21 +14,21 @@ type Character struct{
 	Stats CharacterStats `json:"stats,omitempty"`
 	Hp CharacterHP `json:"hp,omitempty"`
 	AC int `json:"ac,omitempty"`
-	PowerDie string `json:"power_die,omitempty"`
+	PowerDie string `json:"powerDie,omitempty"`
 	Rp CharacterRp `json:"rp,omitempty"`
-	SaveDC int `json:"save_dc,omitempty"`
-	AttackMode int `json:"attack_mode,omitempty"`
+	SaveDC int `json:"saveDc,omitempty"`
+	AttackMode int `json:"attackMode,omitempty"`
 	SavingThrows CharacterSavingThrows `json:"saving_throws,omitempty"`
 	Competences []string `json:"competences,omitempty"`
 	Image FileUpload `json:"image,omitempty"`
 }
 
 type CharacterStats struct{
-	INT int `json:"int"`
-	COMB int `json:"comb"`
-	VEL int `json:"vel"`
-	RES int `json:"res"`
-	CAR int `json:"car"`
+	INT int `json:"INT"`
+	COMB int `json:"COMB"`
+	VEL int `json:"VEL"`
+	RES int `json:"RES"`
+	CAR int `json:"CAR"`
 }
 
 type CharacterHP struct{

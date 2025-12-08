@@ -27,5 +27,6 @@ func (c *CreateUser) ExecuteCreateUser(u entities.User) error{
 		return err
 	}
 	u.Password = hashed
+	u.Role = "player"
 	return c.repo.Save(u)
 }

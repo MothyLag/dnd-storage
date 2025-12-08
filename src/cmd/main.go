@@ -24,7 +24,7 @@ func main(){
 	mongoUser := os.Getenv("MONGO_USER")
     mongoPass := os.Getenv("MONGO_PASS")
 	jwtSecret := os.Getenv("JWT_SECRET")
-	portStr := os.Getenv("APP_PORT")
+	portStr := os.Getenv("API_PORT")
     if mongoHOST == "" || mongoUser == "" || mongoPass == "" || mongoDBName == "" || jwtSecret == "" {
         log.Fatal("Debes definir JWT_SECRET,MONGO_HOST, MONGO_USER, MONGO_PASS y MONGO_DB_NAME en variables de entorno")
     }

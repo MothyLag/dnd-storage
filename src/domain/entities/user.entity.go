@@ -6,13 +6,13 @@ import (
 
 type User struct {
 	ID string `json:"-"`
-	UserName string `json:"user_name,omitempty"`
+	UserName string `json:"userName,omitempty"`
 	Password string `json:"password,omitempty"`
 	Role string `json:"role,omitempty"`
 }
 
 type LoginUser struct{
-	UserName string `json:"user_name"`
+	UserName string `json:"userName"`
 	Password string `json:"password"`
 }
 
