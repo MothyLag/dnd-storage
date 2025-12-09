@@ -1,10 +1,10 @@
 services:
   api: 
     expose:
-      - ${API_PORT}
+      - "${API_PORT}"
+    environments:
       - VIRTUAL_HOST=dnd-api.atimo.dev
       - LETSENCRYPT_HOST=dnd-api.atimo.dev
-
   mainDb:
     image: mongodb/mongodb-community-server:latest
     ports:
