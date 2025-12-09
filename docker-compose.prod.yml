@@ -5,6 +5,8 @@ services:
     environment:
       - VIRTUAL_HOST=dnd-api.atimo.dev
       - LETSENCRYPT_HOST=dnd-api.atimo.dev
+    networks:
+        - dndNetwork  
   mainDb:
     image: mongodb/mongodb-community-server:latest
     ports:
@@ -26,6 +28,8 @@ services:
   acme-companion:
     image: nginxproxy/acme-companion
     container_name: acme-companion
+    environment:
+      - NGINX_PROXY_CONTAINER=nginx-proxy
     restart: always
     volumes:
       - ./certs:/etc/nginx/certs:rw
