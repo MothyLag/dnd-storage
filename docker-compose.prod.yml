@@ -2,7 +2,7 @@ services:
   api: 
     expose:
       - "${API_PORT}"
-    environments:
+    environment:
       - VIRTUAL_HOST=dnd-api.atimo.dev
       - LETSENCRYPT_HOST=dnd-api.atimo.dev
   mainDb:
