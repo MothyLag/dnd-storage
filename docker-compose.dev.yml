@@ -1,0 +1,8 @@
+services:
+  api: 
+    ports:
+      - 8080:${API_PORT}
+  mainDb:
+    ports:
+      - 27017:27017
+

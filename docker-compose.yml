@@ -4,15 +4,11 @@ services:
     container_name: dnd-api
     env_file:
       - ./dnd-api.env
-    ports:
-      - 8080:${API_PORT}
     networks:
       - dndNetwork
   mainDb:
     image: mongodb/mongodb-community-server:latest
     container_name: dnd-db
-    ports:
-      - 27017:27017
     env_file:
       - ./dnd-db.env
     networks:
