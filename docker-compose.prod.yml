@@ -1,7 +1,7 @@
 services:
   api: 
     expose:
-      - 5000
+      - ${API_PORT}
       - VIRTUAL_HOST=dnd-api.atimo.dev
       - LETSENCRYPT_HOST=dnd-api.atimo.dev
 
