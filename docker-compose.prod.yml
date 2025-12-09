@@ -1,7 +1,10 @@
 services:
   api: 
-    ports:
-      - 8080:${API_PORT}
+    expose:
+      - 5000
+      - VIRTUAL_HOST=dnd-api.atimo.dev
+      - LETSENCRYPT_HOST=dnd-api.atimo.dev
+
   mainDb:
     image: mongodb/mongodb-community-server:latest
     ports:
